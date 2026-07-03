@@ -24,6 +24,11 @@
 
     <main id="top">
       <section class="hero">
+        <div class="hero-orbit" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <div class="hero-copy">
           <p class="eyebrow">Yandex bo'yicha operatorlar uchun o'quv platforma</p>
           <h1>Zippy Taxi operatorlari uchun tezkor bilim va nazorat testi</h1>
@@ -37,7 +42,14 @@
           </div>
         </div>
         <figure class="hero-media">
-          <img src="assets/zippy-training-hero.png" alt="Zippy Taxi operator ta'limi banneri" />
+          <img
+            src="./assets/zippy-training-hero.jpg"
+            alt="Zippy Taxi operator ta'limi banneri"
+            loading="eager"
+            decoding="async"
+            onerror="this.closest('.hero-media').classList.add('image-failed'); this.remove();"
+          />
+          <figcaption>Operator dispetcher markazi</figcaption>
         </figure>
       </section>
 
@@ -51,7 +63,7 @@
           <span>asosiy dars bloki</span>
         </div>
         <div>
-          <strong>12</strong>
+          <strong>20</strong>
           <span>test savoli</span>
         </div>
         <div>

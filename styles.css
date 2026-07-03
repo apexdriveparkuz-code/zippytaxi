@@ -8,6 +8,8 @@
   --yellow-dark: #d79600;
   --teal: #17b5a6;
   --blue: #3057d5;
+  --violet: #7657ff;
+  --rose: #ff657c;
   --danger: #c93737;
   --success: #147a4b;
   --shadow: 0 18px 55px rgba(23, 36, 55, 0.12);
@@ -27,6 +29,7 @@ body {
   color: var(--ink);
   background: var(--soft);
   line-height: 1.55;
+  overflow-x: hidden;
 }
 
 a {
@@ -96,6 +99,7 @@ a {
 }
 
 .hero {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(340px, 1.08fr);
   align-items: center;
@@ -103,12 +107,55 @@ a {
   min-height: calc(100vh - 74px);
   padding: clamp(32px, 6vw, 74px) clamp(18px, 5vw, 72px);
   background:
+    radial-gradient(circle at 9% 16%, rgba(255, 210, 63, 0.28), transparent 21%),
+    radial-gradient(circle at 72% 20%, rgba(23, 181, 166, 0.2), transparent 18%),
     linear-gradient(115deg, rgba(255, 210, 63, 0.18), transparent 42%),
     linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
+  overflow: hidden;
 }
 
 .hero-copy {
+  position: relative;
+  z-index: 1;
   max-width: 700px;
+  animation: rise-in 0.8s ease both;
+}
+
+.hero-orbit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-orbit span {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border: 1px solid rgba(28, 36, 48, 0.12);
+  border-radius: 50%;
+  animation: float-ring 11s ease-in-out infinite;
+}
+
+.hero-orbit span:nth-child(1) {
+  left: 42%;
+  top: 12%;
+}
+
+.hero-orbit span:nth-child(2) {
+  right: 10%;
+  bottom: 12%;
+  width: 230px;
+  height: 230px;
+  animation-delay: -4s;
+}
+
+.hero-orbit span:nth-child(3) {
+  left: 6%;
+  bottom: 7%;
+  width: 110px;
+  height: 110px;
+  animation-delay: -7s;
 }
 
 .eyebrow {
@@ -160,6 +207,9 @@ h3 {
 }
 
 .btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -170,25 +220,94 @@ h3 {
   font: inherit;
   font-weight: 800;
   cursor: pointer;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  z-index: -1;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.42), transparent 65%);
+  transform: translateX(-120%) rotate(8deg);
+  transition: transform 0.55s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(23, 36, 55, 0.16);
+}
+
+.btn:hover::after {
+  transform: translateX(120%) rotate(8deg);
 }
 
 .btn.primary {
-  background: var(--ink);
+  background: linear-gradient(135deg, var(--ink), #101827);
   color: #fff;
 }
 
 .btn.secondary {
-  background: #fff;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(135deg, var(--yellow), var(--teal), var(--violet)) border-box;
   color: var(--ink);
-  border-color: var(--line);
+  border-color: transparent;
 }
 
 .hero-media {
+  position: relative;
+  z-index: 1;
   margin: 0;
   overflow: hidden;
   border-radius: 8px;
   box-shadow: var(--shadow);
-  background: #dfe8ef;
+  background:
+    linear-gradient(135deg, rgba(255, 210, 63, 0.42), rgba(23, 181, 166, 0.2)),
+    #dfe8ef;
+  animation: hero-card-in 0.9s 0.14s ease both;
+}
+
+.hero-media::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.hero-media::after {
+  content: "Zippy Taxi dispatch training";
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  z-index: 3;
+  display: none;
+  max-width: 260px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: rgba(28, 36, 48, 0.9);
+  color: #fff;
+  font-weight: 800;
+}
+
+.hero-media.image-failed {
+  min-height: min(58vh, 560px);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.62) 0 1px, transparent 1px 72px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.42) 0 1px, transparent 1px 72px),
+    radial-gradient(circle at 72% 33%, rgba(255, 210, 63, 0.55), transparent 20%),
+    radial-gradient(circle at 38% 68%, rgba(23, 181, 166, 0.35), transparent 22%),
+    linear-gradient(135deg, #dfe8ef, #ffffff);
+}
+
+.hero-media.image-failed::after {
+  display: block;
 }
 
 .hero-media img {
@@ -196,6 +315,27 @@ h3 {
   width: 100%;
   height: min(58vh, 560px);
   object-fit: cover;
+  transition: transform 0.8s ease, filter 0.8s ease;
+}
+
+.hero-media:hover img {
+  transform: scale(1.035);
+  filter: saturate(1.05) contrast(1.03);
+}
+
+.hero-media figcaption {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  z-index: 3;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+  backdrop-filter: blur(10px);
 }
 
 .stats-band {
@@ -212,6 +352,14 @@ h3 {
   padding: 20px;
   background: var(--paper);
   border: 1px solid var(--line);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.stats-band div:hover,
+.lesson-card:hover,
+.tariff-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 42px rgba(23, 36, 55, 0.11);
 }
 
 .stats-band strong {
@@ -247,11 +395,13 @@ h3 {
   background: #fff;
   color: var(--muted);
   font-weight: 800;
+  transition: transform 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
 .lesson-nav a:hover {
   border-color: var(--teal);
   color: var(--ink);
+  transform: translateX(5px);
 }
 
 .lessons {
@@ -272,6 +422,8 @@ h3 {
   position: relative;
   padding: clamp(22px, 4vw, 36px);
   overflow: hidden;
+  animation: rise-in 0.72s ease both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .lesson-card::before {
@@ -288,6 +440,18 @@ h3 {
 
 .lesson-card.accent-teal::before {
   background: var(--teal);
+}
+
+.lesson-card::after {
+  content: "";
+  position: absolute;
+  right: -54px;
+  top: -54px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 210, 63, 0.32), transparent 68%);
+  pointer-events: none;
 }
 
 .lesson-number {
@@ -424,6 +588,7 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fbfcfe;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .tariff-card h3 {
@@ -444,13 +609,21 @@ h3 {
 .quiz-form {
   display: grid;
   gap: 16px;
+  counter-reset: quiz;
 }
 
 .question {
+  position: relative;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fbfcfe;
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+
+.question:hover {
+  transform: translateX(4px);
+  border-color: rgba(23, 181, 166, 0.52);
 }
 
 .question h3 {
@@ -471,6 +644,13 @@ h3 {
   border-radius: 8px;
   background: #fff;
   cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.answer:hover {
+  transform: translateX(4px);
+  border-color: rgba(48, 87, 213, 0.42);
+  background: #f7fbff;
 }
 
 .answer input {
@@ -494,6 +674,7 @@ h3 {
   border-radius: 8px;
   border: 1px solid var(--line);
   background: #fff;
+  animation: rise-in 0.35s ease both;
 }
 
 .quiz-result.show {
@@ -504,6 +685,57 @@ h3 {
   display: block;
   margin-bottom: 8px;
   font-size: 22px;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.result-metric {
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.result-metric b {
+  display: block;
+  font-size: 24px;
+}
+
+.result-metric span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.review-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.review-item {
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(201, 55, 55, 0.26);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.review-item h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.review-item p {
+  margin-bottom: 6px;
+}
+
+.review-item .right-answer {
+  color: var(--success);
+  font-weight: 800;
 }
 
 .quiz-result.success {
@@ -547,7 +779,8 @@ h3 {
 
   .stats-band,
   .tariff-grid,
-  .level-timeline {
+  .level-timeline,
+  .result-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -569,6 +802,7 @@ h3 {
   }
 
   .stats-band,
+  .result-grid,
   .two-col,
   .split-list,
   .rates,
@@ -585,5 +819,48 @@ h3 {
 
   .tariff-card.wide {
     grid-column: auto;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-card-in {
+  from {
+    opacity: 0;
+    transform: translateX(28px) rotate(1.2deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes float-ring {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(18px, -22px, 0) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
   }
 }
